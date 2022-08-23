@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Startup {
 
 	public static void main(String[] args) {
-		System.out.println("ataa2");
 		SpringApplication.run(Startup.class, args);
 	}
 

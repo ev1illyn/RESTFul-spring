@@ -1,5 +1,6 @@
-package br.com.springrestful;
+package br.com.springrestful.controllers;
 
+import br.com.springrestful.model.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package br.com.springrestful;
+package br.com.springrestful.model;
 
 public class Greeting {
     private final long id;
