@@ -1,6 +1,6 @@
 package br.com.springrestful.controllers;
 
-import br.com.springrestful.exceptions.UnsupportedMathOperationException;
+import br.com.springrestful.exceptions.ResourceNotFoundException;
 import br.com.springrestful.utils.MathOperations;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public class MathController {
             @PathVariable(value = "numberTwo") String numberTwo
         ) throws RuntimeException {
         if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Coloca um número, dumbass");
+            throw new ResourceNotFoundException("Coloca um número, dumbass");
         } return mathOperations.sum(convertToDouble(numberOne), convertToDouble(numberTwo));
     }
 
@@ -33,7 +33,7 @@ public class MathController {
             @PathVariable(value = "numberTwo") String numberTwo
     ) throws RuntimeException {
         if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Coloca um número, dumbass");
+            throw new ResourceNotFoundException("Coloca um número, dumbass");
         } return mathOperations.subtraction(convertToDouble(numberOne), convertToDouble(numberTwo));
     }
 
@@ -44,10 +44,10 @@ public class MathController {
             @PathVariable(value = "numberTwo") String numberTwo
     ) throws RuntimeException {
         if (numberTwo.equals("0")){
-            throw new UnsupportedMathOperationException("Não se pode dividir por 0");
+            throw new ResourceNotFoundException("Não se pode dividir por 0");
         }
         if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Coloca um número, dumbass");
+            throw new ResourceNotFoundException("Coloca um número, dumbass");
         } return mathOperations.division(convertToDouble(numberOne), convertToDouble(numberTwo));
     }
 
@@ -58,7 +58,7 @@ public class MathController {
             @PathVariable(value = "numberTwo") String numberTwo
     ) throws RuntimeException {
         if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Coloca um número, dumbass");
+            throw new ResourceNotFoundException("Coloca um número, dumbass");
         } return mathOperations.mean(convertToDouble(numberOne), convertToDouble(numberTwo));
     }
 
@@ -69,7 +69,7 @@ public class MathController {
             @PathVariable(value = "numberTwo") String numberTwo
     ) throws RuntimeException {
         if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-            throw new UnsupportedMathOperationException("Coloca um número, dumbass");
+            throw new ResourceNotFoundException("Coloca um número, dumbass");
         } return mathOperations.multiplication(convertToDouble(numberOne), convertToDouble(numberTwo));
     }
 
@@ -79,7 +79,7 @@ public class MathController {
             @PathVariable(value = "numberOne") String numberOne
     ) throws RuntimeException {
         if (!isNumeric(numberOne)) {
-            throw new UnsupportedMathOperationException("Coloca um número, dumbass");
+            throw new ResourceNotFoundException("Coloca um número, dumbass");
         } return mathOperations.squareroot(convertToDouble(numberOne));
     }
 
