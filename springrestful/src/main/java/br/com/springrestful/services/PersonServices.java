@@ -1,14 +1,14 @@
 package br.com.springrestful.services;
 
+import br.com.springrestful.data.vo.v1.PersonVO;
 import br.com.springrestful.exceptions.ResourceNotFoundException;
+import br.com.springrestful.mapper.DozerMapper;
 import br.com.springrestful.models.Person;
 import br.com.springrestful.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 @Service
@@ -20,30 +20,34 @@ public class PersonServices {
     @Autowired
     PersonRepository repository;
 
-    public List<Person> findAll(){
+    public List<PersonVO> findAll(){
         logger.info("Api está buscando todas as pessoa!");
 
-        List<Person> persons = new ArrayList<>();
-        return repository.findAll();
+        return DozerMapper
+                .parseListObjects(repository.findAll(),
+                        PersonVO.class);
 
     }
 
-    private Person mockPerson(int i) {
-        Person person = new Person();
-        person.setFirstName("Nome da pessoa: " + i);
-        person.setLastName("Sobrenome: " + i);
-        person.setAddress("JuaCity");
-        person.setGender("Muié");
-        return person;
+    public PersonVO findById(Long id){
+        logger.info("Api está buscando uma pessoa!");
+
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new
+                        ResourceNotFoundException("Não foi encontrado nenhum resultado."));
+
+        return DozerMapper.parseObject(entity, PersonVO.class);
     }
 
-    public Person create(Person person) {
+    public PersonVO create(PersonVO person) {
         logger.info("Criando uma pessoa!");
 
-        return repository.save(person);
+        var entity = DozerMapper.parseObject(person, Person.class);
+        var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
     }
 
-    public Person update(Person person) {
+    public PersonVO update(PersonVO person) {
         logger.info("Atualizando uma pessoa!");
 
         var entity = repository.findById(person.getId())
@@ -54,7 +58,8 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        return repository.save(person);
+        var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
     }
 
     public void delete(Long id) {
@@ -65,20 +70,6 @@ public class PersonServices {
 
         repository.delete(entity);
 
-    }
-
-    public Person findById(Long id){
-        logger.info("Api está buscando uma pessoa!");
-
-        //mock enquanto não tem banco configurado
-        Person person = new Person();
-        person.setFirstName("Evy");
-        person.setLastName("Loki");
-        person.setAddress("JuaCity");
-        person.setGender("Muié");
-        return repository.findById(id)
-                .orElseThrow(() -> new
-                        ResourceNotFoundException("Não foi encontrado nenhum resultado."));
     }
 
 }
