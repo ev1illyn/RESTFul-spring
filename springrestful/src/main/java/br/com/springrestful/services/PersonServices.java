@@ -1,8 +1,10 @@
 package br.com.springrestful.services;
 
 import br.com.springrestful.data.vo.v1.PersonVO;
+import br.com.springrestful.data.vo.v2.PersonVOV2;
 import br.com.springrestful.exceptions.ResourceNotFoundException;
 import br.com.springrestful.mapper.DozerMapper;
+import br.com.springrestful.mapper.custom.PersonMapper;
 import br.com.springrestful.models.Person;
 import br.com.springrestful.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class PersonServices {
 
     @Autowired
     PersonRepository repository;
+
+    @Autowired
+    PersonMapper personMapper;
 
     public List<PersonVO> findAll(){
         logger.info("Api está buscando todas as pessoa!");
@@ -44,6 +49,14 @@ public class PersonServices {
 
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
+    }
+
+    public PersonVOV2 createV2(PersonVOV2 personVOV2) {
+        logger.info("Criando uma pessoa V2!");
+
+        var entity = personMapper.convertVoToEntity(personVOV2);
+        var vo = personMapper.convertEntityToVo(repository.save(entity));
         return vo;
     }
 
