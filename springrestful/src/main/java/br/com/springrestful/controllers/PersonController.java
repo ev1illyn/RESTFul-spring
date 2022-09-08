@@ -17,18 +17,18 @@ public class PersonController {
     @Autowired
     private PersonServices personServices;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PersonVO> findAll(){
         return personServices.findAll();
     }
 
-    @GetMapping(value = "/{id}",
+    @GetMapping(value = "/v1/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonVO findById(@PathVariable(value= "id") Long id){
         return personServices.findById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value = "/v1", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonVO create(@RequestBody PersonVO person){
         return personServices.create(person);
@@ -41,14 +41,14 @@ public class PersonController {
     }
 
 
-    @PutMapping(value = "/{id}",
+    @PutMapping(value = "v1/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public PersonVO update(@RequestBody PersonVO person){
         return personServices.update(person);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "v1/{id}")
     public ResponseEntity<?> delete(@PathVariable(value= "id") Long id){
 
         personServices.delete(id);
