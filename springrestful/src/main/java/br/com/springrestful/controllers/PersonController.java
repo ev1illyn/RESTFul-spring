@@ -18,8 +18,7 @@ public class PersonController {
     private PersonServices personServices;
 
     @GetMapping(value = "/v1",
-            produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML
-            })
+            produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
     public List<PersonVO> findAll(){
         return personServices.findAll();
     }

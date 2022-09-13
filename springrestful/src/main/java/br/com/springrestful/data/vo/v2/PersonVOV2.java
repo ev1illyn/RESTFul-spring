@@ -1,11 +1,13 @@
 package br.com.springrestful.data.vo.v2;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.Date;
 import java.util.Objects;
 
-public class PersonVOV2 {
+public class PersonVOV2 extends RepresentationModel<PersonVOV2> {
 
-    private Long id;
+    private Long key;
     private String firstName;
     private String lastName;
     private String address;
@@ -16,12 +18,12 @@ public class PersonVOV2 {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersonVOV2 personVO2 = (PersonVOV2) o;
-        return Objects.equals(id, personVO2.id) && Objects.equals(firstName, personVO2.firstName) && Objects.equals(lastName, personVO2.lastName) && Objects.equals(address, personVO2.address) && Objects.equals(gender, personVO2.gender) && Objects.equals(birthDate, personVO2.birthDate);
+        return Objects.equals(key, personVO2.key) && Objects.equals(firstName, personVO2.firstName) && Objects.equals(lastName, personVO2.lastName) && Objects.equals(address, personVO2.address) && Objects.equals(gender, personVO2.gender) && Objects.equals(birthDate, personVO2.birthDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address, gender, birthDate);
+        return Objects.hash(key, firstName, lastName, address, gender, birthDate);
     }
 
     private Date birthDate;
@@ -38,12 +40,12 @@ public class PersonVOV2 {
     public PersonVOV2() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(Long key) {
+        this.key = key;
     }
 
     public String getFirstName() {
