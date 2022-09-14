@@ -3,6 +3,7 @@ package br.com.springrestful.services;
 import br.com.springrestful.controllers.PersonController;
 import br.com.springrestful.data.vo.v1.PersonVO;
 import br.com.springrestful.data.vo.v2.PersonVOV2;
+import br.com.springrestful.exceptions.RequiredObjectIsNullException;
 import br.com.springrestful.exceptions.ResourceNotFoundException;
 import br.com.springrestful.mapper.DozerMapper;
 import br.com.springrestful.mapper.custom.PersonMapper;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Service
-public class PersonServices {
+public class PersonServices  {
 
     //ao invés de usar log4g
     private Logger logger = Logger.getLogger(PersonServices.class.getName());
@@ -56,6 +57,7 @@ public class PersonServices {
     public PersonVO create(PersonVO person) {
         logger.info("Criando uma pessoa!");
 
+        if (person == null) throw new RequiredObjectIsNullException();
         var entity = DozerMapper.parseObject(person, Person.class);
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
@@ -74,6 +76,7 @@ public class PersonServices {
     public PersonVO update(PersonVO person) {
         logger.info("Atualizando uma pessoa!");
 
+        if (person == null) throw new RequiredObjectIsNullException();
         var entity = repository.findById(person.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado nenhum resultado."));
 
