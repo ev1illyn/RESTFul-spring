@@ -42,6 +42,7 @@ public class PersonController {
         return personServices.findAll();
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080", "http://google.com"})
     @GetMapping(value = "/v1/{id}",
             produces =  { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
     @Operation(summary = "Retorna pessoa pelo Id", description = "Retorna pessoa pelo Id", tags = {"People"},
@@ -59,6 +60,7 @@ public class PersonController {
         return personServices.findById(id);
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080", "http://google.com"})
     @PostMapping(value = "/v1",
             consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML },
             produces =  { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })

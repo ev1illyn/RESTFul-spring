@@ -1,10 +1,12 @@
 package br.com.springrestful.config;
 
 import br.com.springrestful.serialization.converter.YamlJackson2HttpMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${cors.originPatterns:default}")
+    private String corsOriginPatterns = "";
     private static final MediaType
             MEDIA_TYPE_APPLICATION_YML = MediaType.valueOf("application/x-yaml");
 
@@ -27,6 +31,16 @@ public class WebConfig implements WebMvcConfigurer {
                     .mediaType("json", MediaType.APPLICATION_JSON)
                     .mediaType("xml", MediaType.APPLICATION_XML);
     }*/
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        var allowedOrigins = corsOriginPatterns.split(",");
+        registry.addMapping("/**")
+                //.allowedMethods("GET", "POST", "DELETE", "UPDATE")
+                .allowedMethods("*")
+                .allowedOrigins(allowedOrigins)
+                .allowCredentials(true);
+    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer contentNegotiationConfigurer) {
