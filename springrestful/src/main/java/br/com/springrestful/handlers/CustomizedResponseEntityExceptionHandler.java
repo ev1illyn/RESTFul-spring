@@ -1,6 +1,7 @@
 package br.com.springrestful.handlers;
 
 import br.com.springrestful.exceptions.ExceptionResponse;
+import br.com.springrestful.exceptions.InvalidJwtAuthenticationException;
 import br.com.springrestful.exceptions.RequiredObjectIsNullException;
 import br.com.springrestful.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,15 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                 ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ExceptionResponse> handleInvalidJwtAuthenticationExceptions(
+            Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 }

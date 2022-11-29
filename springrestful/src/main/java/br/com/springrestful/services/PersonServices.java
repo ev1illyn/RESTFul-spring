@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @Service
 public class PersonServices  {
 
-    //ao invés de usar log4g
+    //ao invés de usar log4j
     private Logger logger = Logger.getLogger(PersonServices.class.getName());
 
     @Autowired

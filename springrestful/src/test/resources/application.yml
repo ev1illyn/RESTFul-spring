@@ -2,6 +2,11 @@ server:
   port: 8888
 cors:
   originPatterns: http://localhost:8080,http://google.com,http://localhost:3000,http://localhost:9000
+security:
+  jwt:
+    token:
+      secret-key: 53ccr37
+      expire-length: 3600000
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
