@@ -43,7 +43,7 @@ public class User implements UserDetails, Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_permission", joinColumns = {@JoinColumn (name = "id_user")},
-        inverseJoinColumns = {@JoinColumn (name = "{id_user}")})
+        inverseJoinColumns = {@JoinColumn (name = "id_permission")})
     private List<Permission> permissionList;
 
     public User() {}

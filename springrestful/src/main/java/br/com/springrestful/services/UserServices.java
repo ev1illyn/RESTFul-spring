@@ -24,10 +24,12 @@ public class UserServices implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("buscando usuário por nome: " + username + "!");
+        logger.info("buscando usuário por nome: " + username);
         var user = repository.findByUsername(username);
-        if (user!=null) { return user;
-        } else { throw new UsernameNotFoundException("usuário " + username + " não encontrado.");
+        if (user!=null) {
+            return user;
+        } else {
+            throw new UsernameNotFoundException("usuário " + username + " não encontrado.");
         }
     }
 }

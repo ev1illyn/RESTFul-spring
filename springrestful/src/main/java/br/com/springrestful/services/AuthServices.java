@@ -31,7 +31,7 @@ public class AuthServices {
 			var username = data.getUsername();
 			var password = data.getPassword();
 			authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(username, password));
+					new UsernamePasswordAuthenticationToken(username, password));
 			
 			var user = repository.findByUsername(username);
 			
