@@ -13,6 +13,8 @@ public class PersonVOV2 extends RepresentationModel<PersonVOV2> {
     private String address;
     private String gender;
 
+    private Boolean enabled;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -23,7 +25,7 @@ public class PersonVOV2 extends RepresentationModel<PersonVOV2> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, firstName, lastName, address, gender, birthDate);
+        return Objects.hash(super.hashCode(), key, firstName, lastName, address, gender, enabled, birthDate);
     }
 
     private Date birthDate;
@@ -80,4 +82,11 @@ public class PersonVOV2 extends RepresentationModel<PersonVOV2> {
         this.gender = gender;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 }

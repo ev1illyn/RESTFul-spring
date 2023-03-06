@@ -14,6 +14,8 @@ public class PersonVO {
     private String address;
     private String gender;
 
+    private Boolean enabled;
+
     public PersonVO() {
     }
 
@@ -55,6 +57,14 @@ public class PersonVO {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

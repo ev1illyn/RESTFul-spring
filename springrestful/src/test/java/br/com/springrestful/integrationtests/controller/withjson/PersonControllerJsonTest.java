@@ -1,6 +1,8 @@
 package br.com.springrestful.integrationtests.controller.withjson;
 
 import br.com.springrestful.configs.TestConfigs;
+import br.com.springrestful.data.vo.v1.security.AccountCredentialsVO;
+import br.com.springrestful.data.vo.v1.security.TokenVO;
 import br.com.springrestful.integrationtests.vo.PersonVO;
 import br.com.springrestful.it.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
@@ -11,7 +13,9 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationFeature;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -34,21 +38,44 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		personVO = new PersonVO();
 	}
 
+
 	@Test
-	@Order(1)
-	public void testeCreate() throws IOException {
-		mockPerson();
+	@Order(0)
+	public void authorization() throws JsonMappingException, JsonProcessingException {
+		AccountCredentialsVO user = new AccountCredentialsVO("leandro", "admin123");
+
+		var accessToken = given()
+				.basePath("/auth/signin")
+					.port(TestConfigs.SERVER_PORT)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.body(personVO)
+					.when()
+				.post()
+					.then()
+						.statusCode(200)
+							.extract()
+							.body()
+								.as(TokenVO.class)
+							.getAccessToken();
+
 		specification = new RequestSpecBuilder()
-			.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
+				.addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
 				.setBasePath("/api/person/v1")
 				.setPort(TestConfigs.SERVER_PORT)
 				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
 				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
 				.build();
+	}
+
+	@Test
+	@Order(1)
+	public void testeCreate() throws IOException {
+		mockPerson();
 
 		var content =
 			given().spec(specification)
 					.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
 					.body(personVO)
 					.when()
 					.post()
@@ -79,17 +106,11 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	@Order(2)
 	public void testeCreateWithWrongOrigin() throws IOException {
 		mockPerson();
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GOOGLE)
-				.setBasePath("/api/person/v1")
-				.setPort(TestConfigs.SERVER_PORT)
-				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
 
 		var content =
 				given().spec(specification)
 						.contentType(TestConfigs.CONTENT_TYPE_JSON)
+						.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GOOGLE)
 						.body(personVO)
 						.when()
 						.post()
@@ -109,17 +130,11 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	@Order(3)
 	public void testeFindById() throws IOException {
 		mockPerson();
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
-				.setBasePath("/api/person/v1")
-				.setPort(TestConfigs.SERVER_PORT)
-				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
 
 		var content =
 				given().spec(specification)
 						.contentType(TestConfigs.CONTENT_TYPE_JSON)
+						.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_LOCAL)
 						.pathParams("id", personVO.getId())
 						.when()
 							.get("{id}")
@@ -150,17 +165,11 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	@Order(4)
 	public void testeFindByIdWithWrongCors() throws IOException {
 		mockPerson();
-		specification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GOOGLE)
-				.setBasePath("/api/person/v1")
-				.setPort(TestConfigs.SERVER_PORT)
-				.addFilter(new RequestLoggingFilter(LogDetail.ALL))
-				.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-				.build();
 
 		var content =
 				given().spec(specification)
 						.contentType(TestConfigs.CONTENT_TYPE_JSON)
+						.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_GOOGLE)
 						.pathParams("id", personVO.getId())
 						.when()
 						.get("{id}")

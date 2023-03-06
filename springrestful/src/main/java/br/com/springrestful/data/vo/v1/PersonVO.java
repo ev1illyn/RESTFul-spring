@@ -24,6 +24,8 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
     private String address;
     private String gender;
 
+    private Boolean enabled;
+
     public PersonVO() {
     }
 
@@ -77,7 +79,14 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, firstName, lastName, address, gender);
+        return Objects.hash(super.hashCode(), key, firstName, lastName, address, gender, enabled);
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 }

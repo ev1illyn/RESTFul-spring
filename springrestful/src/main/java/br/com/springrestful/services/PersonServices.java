@@ -9,6 +9,7 @@ import br.com.springrestful.mapper.DozerMapper;
 import br.com.springrestful.mapper.custom.PersonMapper;
 import br.com.springrestful.models.Person;
 import br.com.springrestful.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -87,6 +88,20 @@ public class PersonServices  {
 
         var vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
+        return vo;
+    }
+
+    @Transactional
+    public PersonVO disablePerson(Long id){
+        logger.info("Desativa uma pessoa!");
+
+        repository.disablePerson(id);
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new
+                        ResourceNotFoundException("Não foi encontrado nenhum resultado."));
+
+        PersonVO vo = DozerMapper.parseObject(entity, PersonVO.class);
+        vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
         return vo;
     }
 
